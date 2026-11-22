@@ -1,0 +1,490 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>D. C. R. S — Photographer</title>
+<meta name="description" content="Quiet pictures of ordinary days by Sreenandan C. S, from Koorkenchery, Thrissur, Kerala.">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,500&family=Manrope:wght@300;400;500;600&display=swap">
+<style>
+:root{
+  --bg:#0c0b09; --fg:#f1ebdd; --muted:#a59d8c; --soft:#cfc7b6;
+  --panel:#15130f; --line:rgba(241,235,221,.12); --line-strong:rgba(241,235,221,.35);
+  --accent:#c8a25a; --foot:#7d766a;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--fg)}
+body{font-family:Manrope,system-ui,sans-serif;font-weight:300;line-height:1.65;padding:0 max(20px,4vw) 64px;padding-left:max(20px,4vw);padding-right:max(20px,4vw);overflow-x:hidden}
+a{color:inherit}
+a:hover{opacity:.7}
+button{font:inherit;color:inherit}
+button:focus-visible,a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+img{display:block;max-width:100%}
+.wrap{max-width:1120px;margin:0 auto}
+.serif{font-family:'Cormorant Garamond',Georgia,serif;font-weight:400}
+.pill{background:transparent;border:1px solid var(--line-strong);color:var(--fg);border-radius:999px;padding:7px 16px;cursor:pointer;font-size:13px;letter-spacing:.04em}
+.pill[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#0c0b09}
+.pill.liked{background:var(--accent);border-color:var(--accent);color:#0c0b09}
+.pill.sel[aria-pressed="true"]{background:var(--fg);border-color:var(--fg);color:#0c0b09}
+.eyebrow{font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);font-weight:500}
+
+header.site{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:16px;padding:28px 0;border-bottom:1px solid var(--line)}
+header.site .brand{font-family:'Cormorant Garamond',Georgia,serif;font-size:28px;font-weight:500;letter-spacing:.06em;text-decoration:none}
+header.site nav{display:flex;flex-wrap:wrap;gap:22px;font-size:13px;letter-spacing:.14em;text-transform:uppercase}
+header.site nav a{text-decoration:none}
+
+.hero{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:48px;align-items:center;padding:56px 0 48px}
+.hero .copy{min-width:0}
+.hero h1{margin:0 0 22px;font-family:'Cormorant Garamond',Georgia,serif;font-weight:400;font-size:clamp(46px,7vw,88px);line-height:1.02;text-wrap:balance}
+.hero h1 em{color:var(--accent)}
+.hero p.lead{margin:0 0 32px;max-width:46ch;font-size:17px;color:var(--muted)}
+.btn-accent{display:inline-block;background:var(--accent);color:#0c0b09;padding:15px 30px;text-decoration:none;font-weight:500;letter-spacing:.08em;font-size:14px;text-transform:uppercase}
+.hero img{width:100%;aspect-ratio:4/5;object-fit:cover;min-width:0}
+
+section.block{padding:64px 0 24px}
+section.block h2{margin:0 0 40px;font-family:'Cormorant Garamond',Georgia,serif;font-weight:400;font-size:44px}
+.selbar{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:12px;margin:-24px 0 32px;font-size:14px;color:var(--muted)}
+.selbar button{background:transparent;border:1px solid var(--line-strong);color:var(--fg);border-radius:999px;padding:6px 14px;cursor:pointer;font-size:13px}
+.group{margin-bottom:48px}
+.group h3{margin:0 0 16px;font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);font-weight:500}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));gap:18px 14px}
+figure{margin:0;min-width:0}
+figure img{width:100%;aspect-ratio:4/5;object-fit:cover;cursor:zoom-in;-webkit-touch-callout:none;user-select:none}
+figure .row{display:flex;justify-content:space-between;align-items:center;gap:8px;padding-top:10px}
+
+/* full-size viewer */
+#viewer{position:fixed;inset:0;z-index:50;background:rgba(12,11,9,.97);display:none;flex-direction:column}
+#viewer.open{display:flex}
+#viewer .top,#viewer .bottom{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 16px;flex:0 0 auto}
+#viewer .bottom{padding:12px 16px}
+#viewer .zoomwrap{display:flex;align-items:center;gap:8px}
+#viewer .round{background:transparent;border:1px solid var(--line-strong);color:var(--fg);border-radius:999px;width:36px;height:36px;cursor:pointer;font-size:18px;line-height:1}
+#viewer .label{min-width:52px;text-align:center;font-size:13px;letter-spacing:.04em}
+#viewer .stage{flex:1 1 auto;min-height:0;overflow:auto;padding:0 16px 16px}
+#viewer .stage img{display:block;margin:0 auto;height:auto;object-fit:contain;cursor:zoom-in;-webkit-touch-callout:none;user-select:none}
+#viewer.fit .stage img{width:auto;max-width:100%;max-height:calc(100vh - 110px)}
+#viewer .txt{background:transparent;border:1px solid var(--line-strong);color:var(--fg);border-radius:999px;padding:8px 16px;cursor:pointer;font-size:13px;letter-spacing:.08em}
+#viewer .txt.caps{letter-spacing:.14em;text-transform:uppercase}
+
+.about{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:48px}
+.about h2{margin:0;font-family:'Cormorant Garamond',Georgia,serif;font-weight:400;font-size:44px}
+.about .body{min-width:0;font-size:17px;color:var(--soft)}
+.about .body p{margin:0 0 18px}
+.camera{margin-top:28px;padding-top:20px;border-top:1px solid var(--line)}
+.camera ul{margin:0;padding-left:18px;color:var(--soft);font-size:15px;line-height:1.8}
+
+.contact{max-width:1120px;margin:0 auto;padding:72px 0 0}
+.contact .card{background:var(--panel);border:1px solid var(--line);padding:clamp(32px,5vw,56px);display:grid;gap:16px}
+.contact h2{margin:0;font-family:'Cormorant Garamond',Georgia,serif;font-weight:400;font-size:clamp(34px,5vw,48px)}
+.contact h2 em{color:var(--accent)}
+.contact p{margin:0;font-size:16px;color:var(--muted);max-width:46ch}
+.contact .mail{margin:8px 0 0;font-size:18px;font-weight:500;overflow-wrap:anywhere}
+.contact .copy{background:transparent;border:1px solid var(--accent);color:var(--accent);border-radius:999px;padding:10px 20px;cursor:pointer;font-size:13px;letter-spacing:.08em;text-transform:uppercase;justify-self:start}
+.contact .copy.done{background:var(--accent);color:#0c0b09}
+footer.site{padding:32px 0;font-size:12px;letter-spacing:.08em;color:var(--foot);max-width:1120px;margin:0 auto}
+
+#viewer .cpanel{display:none;max-height:55vh;overflow:auto;padding:0 16px 16px;flex:0 0 auto;border-top:1px solid var(--line)}
+#viewer .cpanel.open{display:block}
+#viewer .cnote{font-size:14px;color:var(--muted);padding:12px 0}
+
+@media (prefers-reduced-motion: reduce){*{scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="site" id="top">
+    <a class="brand" href="#top">D. C. R. S</a>
+    <nav>
+      <a href="#work">Work</a>
+      <a href="#about">About</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <div class="copy">
+      <p class="eyebrow" style="margin:0 0 18px">Photographer in Koorkenchery, Thrissur, Kerala</p>
+      <h1>Quiet pictures of ordinary days, <em>made to be kept.</em></h1>
+      <p class="lead">Night streets, temple evenings, the sea at sunset and small things noticed along the way.</p>
+      <a class="btn-accent" href="#contact">Get in touch</a>
+    </div>
+    <img src="images/9e12ef07c4546c89b7d0599bae34fc58.jpg" alt="Orange sports car parked outside a lit showroom at night, red tail lights glowing">
+  </section>
+
+  <section class="block" id="work">
+    <h2 class="serif">Selected work</h2>
+    <div class="selbar">
+      <span id="selLabel">No photos selected</span>
+      <button type="button" id="clearSel">Clear selection</button>
+    </div>
+    <div id="gallery"></div>
+  </section>
+
+  <section class="about" id="about" style="padding:72px 0 24px">
+    <h2>About</h2>
+    <div class="body">
+      <p>I am Sreenandan C. S, a 17-year-old photographer who shoots for the love of it. I work with a single camera and a lot of patience, and I like to take my time with each picture, looking for the small moments that are easy to miss.</p>
+      <div class="camera">
+        <p class="eyebrow" style="margin:0 0 12px">Camera</p>
+        <ul>
+          <li>Canon EOS R10, 24.2 MP APS-C sensor</li>
+          <li>Canon RF-S 18-45mm kit lens</li>
+          <li>4K video at 30 fps</li>
+          <li>Vari-angle touchscreen and subject-detect autofocus</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="contact" id="contact">
+    <div class="card">
+      <h2>Let's make pictures <em>together</em></h2>
+      <p>Write to me if you want to talk about photography, share your own pictures or see a photo up close.</p>
+      <p class="mail"><a href="mailto:dcs954604@gmail.com" style="text-decoration:none">dcs954604@gmail.com</a></p>
+      <button type="button" class="copy" id="copyLink">Copy page link</button>
+    </div>
+  </section>
+</div>
+
+<footer class="site">© D. C. R. S</footer>
+
+<!-- Full-size viewer -->
+<div id="viewer" role="dialog" aria-modal="true" aria-label="Photo at full size">
+  <div class="top">
+    <div class="zoomwrap">
+      <button type="button" class="round" id="zOut" aria-label="Zoom out">−</button>
+      <span class="label" id="zLabel">100%</span>
+      <button type="button" class="round" id="zIn" aria-label="Zoom in">+</button>
+    </div>
+    <button type="button" class="txt caps" id="vClose">Close</button>
+  </div>
+  <div class="stage" id="vStage">
+    <img id="vImg" src="" alt="" draggable="false">
+  </div>
+  <div class="bottom">
+    <button type="button" class="txt" id="vPrev">‹ Previous</button>
+    <button type="button" class="txt" id="vPick">Select</button>
+    <button type="button" class="txt" id="vNext">Next ›</button>
+    <button type="button" class="txt" id="vShare">Share</button>
+    <button type="button" class="txt" id="vComments" aria-expanded="false">Comments</button>
+  </div>
+  <div class="cpanel" id="cPanel">
+    <div id="giscusBox"><p class="cnote">Loading comments…</p></div>
+  </div>
+</div>
+
+<script>
+(function () {
+  var SECTIONS = [
+    { title: 'Night and cars', photos: [
+      ['7941f1f763d45f0a8e0257fedc8f6b58', 'Illuminated pinball machine with a Shiva artwork'],
+      ['b7d9fc992f30d0b071bc9770811eb77d', 'Blurred cyan and red light trails in the dark'],
+      ['002d7752ac355781483d974c39da870a', 'Red car with a dark bonnet, lit by its own glow at night'],
+      ['47ce040c1c81621d657229bfba253746', 'Rear view of a car with red ring tail lights at night'],
+      ['54c214aad439ecc90170ac6c22fbbc30', 'Close view of red ring tail lights on a dark car'],
+      ['9837ffa6498b8baff5486c0b5cf23469', 'Green sports coupe on a tree-lined road in daylight']
+    ]},
+    { title: 'Temples and festivals', photos: [
+      ['d8eb944fda948ae9a1dd273499ab299f', 'Temple roof at night with red neon lettering and marigold garlands'],
+      ['4c10efb7b6e0adb4cfc4f902f7e01735', 'Marigold garlands hung across a temple front'],
+      ['d29ec2b9facd99c7c18194a848d9d434', 'Gold-embroidered wall hangings with small deity images, decorated with tassels'],
+      ['0b7cdefd8bdf7df69ddf09124379a114', 'Red and gold tassel decorations hanging at a stall'],
+      ['cd7425d57d35099a366dfa9d040d82b4', 'Brass oil lamp with a steady flame']
+    ]},
+    { title: 'Places', photos: [
+      ['fc14406d8a63b15264ce835ee1843e81', 'Hill town lights spread across the valley after dark'],
+      ['e8e4feee4668a8550b95928c4ca24465', 'Field of water hyacinth leaves'],
+      ['25a2186afa7801e2f735bf620e6879e7', 'Lit cottages half hidden among trees at dusk'],
+      ['4d9e8174cea8a6d359af44ea667f16d6', 'Hillside town of coloured houses between tea fields and pine trees'],
+      ['7463179a127febba31cd474441c8ad92', 'The same hillside town at dusk with a pink sky'],
+      ['919d87d047f40d86da0fcc671755702d', 'Palm tree tops silhouetted against a blue and pink sky']
+    ]},
+    { title: 'Sea and boats', photos: [
+      ['9fe567317643c95f3026f63ee97dec32', 'Lake at sunset with a tall building on the far shore'],
+      ['8fa9028a931a1944ca34cc5ba128796c', 'Sun setting over a lake with a lone boat on the water'],
+      ['96c0205c6370da9f5c655a56de41d3b9', 'Fishing boat on calm water at sunset, with the sun glowing through haze'],
+      ['5b5edd8dc6c0c674dd115dd2f515c4de', 'Fisherman in a small boat under a hazy sun'],
+      ['43d1b18fa10724f1713d551592bf8f51', 'Bow of a green boat on the water at sunset'],
+      ['166dda1a6b15f19b3b147d19e01867c5', 'Boat with a fisherman and a bird on its mast at sunset']
+    ]},
+    { title: 'Small things', photos: [
+      ['bc4998ab350e3d976a7cc0d31b11e152', 'Cat with green eyes resting on a ledge'],
+      ['eddbf94c0e76d22474e5e58bfef1fce9', 'Orange and white cat looking up, close up'],
+      ['b7969dff754bf6d760e4d3e35f10462b', 'Orange cat resting its head on a white wall'],
+      ['fa1447ada899d6f2922fbe60900da4b8', 'Small white and patched kitten being held up'],
+      ['d7bbeb42c7e6e1aeaee8710497f94afb', 'White flowers with green leaves'],
+      ['a27ccd11274eb83a4b4821a3a323a832', 'Purple toy car on a white surface, blurred plant behind'],
+      ['44c458764c5474ec4b2065e8bfa8346d', 'Grey and purple toy cars beside a plant'],
+      ['dcebd1764b4dc92ad2cbc494379e5b0d', 'Butterfly resting on a small yellow flower']
+    ]}
+  ];
+
+  var flat = [];
+  SECTIONS.forEach(function (s) {
+    s.photos.forEach(function (p) { flat.push({ id: p[0], alt: p[1], src: 'images/' + p[0] + '.jpg' }); });
+  });
+  var indexOf = {};
+  flat.forEach(function (p, i) { indexOf[p.id] = i; });
+
+  function read(key) {
+    try { return JSON.parse(localStorage.getItem(key) || '{}') || {}; } catch (e) { return {}; }
+  }
+  function write(key, obj) {
+    try { localStorage.setItem(key, JSON.stringify(obj)); } catch (e) {}
+  }
+  var liked = read('dcrs-likes');
+  var selected = read('dcrs-selected');
+
+  // Build gallery
+  var gallery = document.getElementById('gallery');
+  SECTIONS.forEach(function (s) {
+    var group = document.createElement('div');
+    group.className = 'group';
+    var h = document.createElement('h3');
+    h.textContent = s.title;
+    group.appendChild(h);
+    var grid = document.createElement('div');
+    grid.className = 'grid';
+    s.photos.forEach(function (p) {
+      var id = p[0];
+      var fig = document.createElement('figure');
+      var img = document.createElement('img');
+      img.src = 'images/' + id + '.jpg';
+      img.alt = p[1];
+      img.draggable = false;
+      img.loading = 'lazy';
+      img.setAttribute('data-id', id);
+      fig.appendChild(img);
+
+      var row = document.createElement('div');
+      row.className = 'row';
+      var likeBtn = document.createElement('button');
+      likeBtn.type = 'button';
+      likeBtn.className = 'pill';
+      likeBtn.setAttribute('data-like', id);
+      var selBtn = document.createElement('button');
+      selBtn.type = 'button';
+      selBtn.className = 'pill sel';
+      selBtn.setAttribute('data-pick', id);
+      row.appendChild(likeBtn);
+      row.appendChild(selBtn);
+      fig.appendChild(row);
+      grid.appendChild(fig);
+    });
+    group.appendChild(grid);
+    gallery.appendChild(group);
+  });
+
+  function paintCard(id) {
+    var like = document.querySelector('[data-like="' + id + '"]');
+    var pick = document.querySelector('[data-pick="' + id + '"]');
+    if (like) {
+      var on = !!liked[id];
+      like.textContent = on ? '👍 Liked' : '👍 Like';
+      like.setAttribute('aria-pressed', on ? 'true' : 'false');
+      like.classList.toggle('liked', on);
+    }
+    if (pick) {
+      var sel = !!selected[id];
+      pick.textContent = sel ? '✓ Selected' : 'Select';
+      pick.setAttribute('aria-pressed', sel ? 'true' : 'false');
+    }
+  }
+  function paintAll() {
+    flat.forEach(function (p) { paintCard(p.id); });
+    var n = Object.keys(selected).filter(function (k) { return selected[k]; }).length;
+    document.getElementById('selLabel').textContent =
+      n ? n + (n === 1 ? ' photo selected' : ' photos selected') : 'No photos selected';
+    if (viewerIndex !== -1) paintViewer();
+  }
+
+  gallery.addEventListener('click', function (e) {
+    var t = e.target;
+    if (t.tagName === 'IMG' && t.getAttribute('data-id')) { openViewer(indexOf[t.getAttribute('data-id')]); return; }
+    var lid = t.getAttribute && t.getAttribute('data-like');
+    if (lid) { liked[lid] = !liked[lid]; write('dcrs-likes', liked); paintAll(); return; }
+    var pid = t.getAttribute && t.getAttribute('data-pick');
+    if (pid) { selected[pid] = !selected[pid]; write('dcrs-selected', selected); paintAll(); }
+  });
+
+  document.getElementById('clearSel').addEventListener('click', function () {
+    selected = {}; write('dcrs-selected', selected); paintAll();
+  });
+
+  // Copy link
+  var copyBtn = document.getElementById('copyLink');
+  copyBtn.addEventListener('click', function () {
+    var url = window.location.href;
+    var done = function () {
+      copyBtn.textContent = 'Link copied';
+      copyBtn.classList.add('done');
+      setTimeout(function () { copyBtn.textContent = 'Copy page link'; copyBtn.classList.remove('done'); }, 1800);
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(url).then(done, function () {});
+    }
+  });
+
+  // Full-size viewer
+  var viewer = document.getElementById('viewer');
+  var vImg = document.getElementById('vImg');
+  var vStage = document.getElementById('vStage');
+  var zLabel = document.getElementById('zLabel');
+  var viewerIndex = -1;
+  var zoom = 1;
+
+  function applyZoom() {
+    if (zoom > 1) {
+      viewer.classList.remove('fit');
+      vImg.style.width = (zoom * 100) + '%';
+      vImg.style.maxWidth = 'none';
+      vImg.style.maxHeight = 'none';
+    } else {
+      viewer.classList.add('fit');
+      vImg.style.width = 'auto';
+      vImg.style.maxWidth = '100%';
+      vImg.style.maxHeight = '';
+    }
+    zLabel.textContent = Math.round(zoom * 100) + '%';
+  }
+  function paintViewer() {
+    var p = flat[viewerIndex];
+    vImg.src = p.src;
+    vImg.alt = p.alt;
+    var on = !!selected[p.id];
+    var pick = document.getElementById('vPick');
+    pick.textContent = on ? '✓ Selected' : 'Select';
+    pick.setAttribute('aria-pressed', on ? 'true' : 'false');
+    updateComments();
+  }
+  function openViewer(i) {
+    viewerIndex = i;
+    zoom = 1;
+    paintViewer();
+    applyZoom();
+    viewer.classList.add('open');
+    vStage.scrollTop = 0;
+    vStage.scrollLeft = 0;
+  }
+  function closeViewer() {
+    viewer.classList.remove('open');
+    viewerIndex = -1;
+  }
+  function step(d) {
+    viewerIndex = (viewerIndex + d + flat.length) % flat.length;
+    zoom = 1;
+    paintViewer();
+    applyZoom();
+    vStage.scrollTop = 0;
+    vStage.scrollLeft = 0;
+  }
+
+  document.getElementById('vClose').addEventListener('click', closeViewer);
+  document.getElementById('vPrev').addEventListener('click', function () { step(-1); });
+  document.getElementById('vNext').addEventListener('click', function () { step(1); });
+  document.getElementById('vPick').addEventListener('click', function () {
+    var id = flat[viewerIndex].id;
+    selected[id] = !selected[id];
+    write('dcrs-selected', selected);
+    paintAll();
+  });
+  document.getElementById('zIn').addEventListener('click', function () {
+    zoom = zoom >= 3 ? 1 : zoom + 0.5; applyZoom();
+  });
+  document.getElementById('zOut').addEventListener('click', function () {
+    zoom = Math.max(1, zoom - 0.5); applyZoom();
+  });
+  vImg.addEventListener('click', function () {
+    zoom = zoom >= 3 ? 1 : zoom + 0.5; applyZoom();
+  });
+  document.addEventListener('keydown', function (e) {
+    if (viewerIndex === -1) return;
+    if (e.key === 'Escape') closeViewer();
+    else if (e.key === 'ArrowLeft') step(-1);
+    else if (e.key === 'ArrowRight') step(1);
+    else if (e.key === '+' || e.key === '=') { zoom = zoom >= 3 ? 1 : zoom + 0.5; applyZoom(); }
+    else if (e.key === '-') { zoom = Math.max(1, zoom - 0.5); applyZoom(); }
+  });
+
+  // ---- Comments (Giscus, stored in GitHub Discussions) ----
+  // Fill these four values from https://giscus.app after enabling Discussions on the repository.
+  var GISCUS = {
+    repo: '',        // e.g. 'your-username/your-repo'
+    repoId: '',      // shown by giscus.app as data-repo-id
+    category: '',    // e.g. 'Photo comments'
+    categoryId: ''   // shown by giscus.app as data-category-id
+  };
+  var cPanel = document.getElementById('cPanel');
+  var cBtn = document.getElementById('vComments');
+  var cOpen = false;
+
+  function commentsReady() {
+    return !!(GISCUS.repo && GISCUS.repoId && GISCUS.category && GISCUS.categoryId);
+  }
+
+  function updateComments() {
+    if (!cOpen || viewerIndex === -1) return;
+    var box = document.getElementById('giscusBox');
+    if (!commentsReady()) {
+      box.innerHTML = '<p class="cnote">Comments are not set up yet.</p>';
+      return;
+    }
+    var term = flat[viewerIndex].id;
+    var frame = box.querySelector('iframe.giscus-frame');
+    if (frame) {
+      frame.contentWindow.postMessage({ giscus: { setConfig: { term: term } } }, 'https://giscus.app');
+      return;
+    }
+    box.innerHTML = '';
+    var s = document.createElement('script');
+    s.src = 'https://giscus.app/client.js';
+    s.async = true;
+    s.crossOrigin = 'anonymous';
+    s.setAttribute('data-repo', GISCUS.repo);
+    s.setAttribute('data-repo-id', GISCUS.repoId);
+    s.setAttribute('data-category', GISCUS.category);
+    s.setAttribute('data-category-id', GISCUS.categoryId);
+    s.setAttribute('data-mapping', 'specific');
+    s.setAttribute('data-term', term);
+    s.setAttribute('data-strict', '0');
+    s.setAttribute('data-reactions-enabled', '1');
+    s.setAttribute('data-emit-metadata', '0');
+    s.setAttribute('data-input-position', 'top');
+    s.setAttribute('data-theme', 'dark');
+    s.setAttribute('data-lang', 'en');
+    box.appendChild(s);
+  }
+
+  // ---- Share ----
+  var shareBtn = document.getElementById('vShare');
+  shareBtn.addEventListener('click', function () {
+    if (viewerIndex === -1) return;
+    var p = flat[viewerIndex];
+    var pageUrl = window.location.href.split('#')[0];
+    var data = { title: 'D. C. R. S', text: p.alt, url: pageUrl };
+    if (navigator.share) {
+      navigator.share(data).catch(function () {});
+      return;
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(pageUrl).then(function () {
+        shareBtn.textContent = 'Link copied';
+        setTimeout(function () { shareBtn.textContent = 'Share'; }, 1800);
+      }, function () {});
+    }
+  });
+
+  cBtn.addEventListener('click', function () {
+    cOpen = !cOpen;
+    cPanel.classList.toggle('open', cOpen);
+    cBtn.setAttribute('aria-expanded', cOpen ? 'true' : 'false');
+    cBtn.textContent = cOpen ? 'Hide comments' : 'Comments';
+    updateComments();
+  });
+
+  paintAll();
+})();
+</script>
+</body>
+</html>
